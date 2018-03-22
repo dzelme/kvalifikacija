@@ -1,0 +1,28 @@
+title LDAP autentifikācijas secību diagramma
+actor Lietotājs
+activate Lietotājs
+
+participant ":Tīmekļa pārlūks" as Tīmekļa pārlūks
+activate Tīmekļa pārlūks
+participant ":AccountController" as account
+Lietotājs->Tīmekļa pārlūks: pierakstīšanās informācija
+
+activate account
+Tīmekļa pārlūks->>account: pierakstīšanās info
+
+
+participant ":LdapClient" as ldap
+activate ldap
+account->ldap: pierakstīšanās info
+
+ldap->ldap: pārbauda pierakstīšanās info
+ldap-->account: atbilde
+deactivate ldap
+
+account->account: izveido JWT tokenu
+account-->Tīmekļa pārlūks: atbilde un JWT tokens
+deactivate account
+
+Tīmekļa pārlūks->Tīmekļa pārlūks: saglabā tokenu sesijas atmiņā
+Tīmekļa pārlūks-->Lietotājs: attēlo administratora skatu
+deactivate Tīmekļa pārlūks
